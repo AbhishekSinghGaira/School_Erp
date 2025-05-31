@@ -1,0 +1,24 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<h2>Notices</h2>
+{% if profile.role in 'teacher admin' %}
+    <a href="/notices/add/" class="btn btn-primary mb-3">Add Notice</a>
+{% endif %}
+<ul class="list-group">
+    {% for n in notices %}
+    <li class="list-group-item">
+        <h5>{{ n.title }}</h5>
+        <p>{{ n.content }}</p>
+        <small>Posted by {{ n.posted_by.username }} on {{ n.created_at|date:'Y-m-d H:i' }}</small>
+        {% if user == n.posted_by or user.is_superuser %}
+        <form action="{% url 'delete_notice' n.id %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-danger float-end ms-2">Delete</button>
+        </form>
+        {% endif %}
+    </li>
+    {% empty %}
+    <li class="list-group-item">No notices found.</li>
+    {% endfor %}
+</ul>
+{% endblock %} 

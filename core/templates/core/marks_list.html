@@ -1,0 +1,49 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<h2>Marks</h2>
+{% if profile.role == 'teacher' %}
+    <a href="/marks/add/" class="btn btn-primary mb-3">Add Marks</a>
+{% endif %}
+
+<div class="row">
+    {% for exam_code, exam_label in exam_types %}
+    <div class="col-12 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">{{ exam_label }}</h5>
+            </div>
+            <div class="card-body p-0">
+                {% if grouped_marks[exam_code] %}
+                <table class="table table-striped mb-0">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Classroom</th>
+                            <th>Subject</th>
+                            <th>Marks Obtained</th>
+                            <th>Max Marks</th>
+                            <th>Entered By</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for m in grouped_marks[exam_code] %}
+                        <tr>
+                            <td>{{ m.student.username }}</td>
+                            <td>{{ m.classroom.name }}</td>
+                            <td>{{ m.subject.name }}</td>
+                            <td>{{ m.marks_obtained }}</td>
+                            <td>{{ m.max_marks }}</td>
+                            <td>{{ m.entered_by.username }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="p-3 text-muted">No records found for {{ exam_label }}.</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %} 

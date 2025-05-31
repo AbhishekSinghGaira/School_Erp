@@ -1,0 +1,20 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<h2>Assignments</h2>
+{% if profile.role == 'teacher' %}
+    <a href="/assignments/add/" class="btn btn-primary mb-3">Add Assignment</a>
+{% endif %}
+<ul class="list-group">
+    {% for a in assignments %}
+    <li class="list-group-item">
+        <h5>{{ a.title }}</h5>
+        <p>{{ a.description }}</p>
+        <div><strong>Classroom:</strong> {{ a.classroom.name }} | <strong>Subject:</strong> {{ a.subject.name }}</div>
+        {% if a.file %}<a href="{{ a.file.url }}" class="btn btn-sm btn-outline-secondary">Download</a>{% endif %}
+        <small class="d-block">Posted by {{ a.posted_by.username }} on {{ a.created_at|date:'Y-m-d H:i' }}</small>
+    </li>
+    {% empty %}
+    <li class="list-group-item">No assignments found.</li>
+    {% endfor %}
+</ul>
+{% endblock %} 

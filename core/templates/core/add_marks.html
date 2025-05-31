@@ -1,0 +1,41 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<h2>Add Marks</h2>
+<form method="post" id="add-marks-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Add</button>
+    <a href="/marks/" class="btn btn-secondary">Back</a>
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const classroomSelect = document.getElementById('id_classroom');
+    const studentSelect = document.getElementById('id_student');
+    if (classroomSelect && studentSelect) {
+        classroomSelect.addEventListener('change', function() {
+            const classroomId = this.value;
+            if (!classroomId) {
+                studentSelect.innerHTML = '<option value="">---------</option>';
+                return;
+            }
+            fetch(`/get_students_by_classroom/${classroomId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    studentSelect.innerHTML = '';
+                    if (data.students.length === 0) {
+                        studentSelect.innerHTML = '<option value="">No students found</option>';
+                    } else {
+                        data.students.forEach(function(student) {
+                            const option = document.createElement('option');
+                            option.value = student.id;
+                            option.textContent = student.username;
+                            studentSelect.appendChild(option);
+                        });
+                    }
+                });
+        });
+    }
+});
+</script>
+{% endblock %} 

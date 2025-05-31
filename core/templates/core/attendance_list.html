@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<h2>Attendance</h2>
+{% if profile.role == 'teacher' %}
+    <a href="/attendance/mark/" class="btn btn-primary mb-3">Mark Attendance</a>
+{% endif %}
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Student</th>
+            <th>Classroom</th>
+            <th>Subject</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Marked By</th>
+            {% if profile.role == 'teacher' %}
+            <th>Marked At</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for att in attendances %}
+        <tr>
+            <td>{{ att.student.username }}</td>
+            <td>{{ att.classroom.name }}</td>
+            <td>{{ att.subject.name }}</td>
+            <td>{{ att.date }}</td>
+            <td>{% if att.present %}<span class="badge bg-success">Present</span>{% else %}<span class="badge bg-danger">Absent</span>{% endif %}</td>
+            <td>{{ att.marked_by.username }}</td>
+            {% if profile.role == 'teacher' %}
+            <td>{{ att.marked_at|date:'Y-m-d H:i:s' }}</td>
+            {% endif %}
+        </tr>
+        {% empty %}
+        <tr><td colspan="7">No records found.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %} 

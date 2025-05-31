@@ -1,0 +1,69 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="jumbotron p-4 bg-light animate__animated animate__fadeIn">
+    <h1 class="display-5">Welcome, {{ user.username|title }}!</h1>
+    <p class="lead">Role: <strong>
+        {% if 'Teachers' in group_names %}Teacher
+        {% elif 'Students' in group_names %}Student
+        {% elif user.is_superuser or 'Admins' in group_names %}Admin
+        {% else %}Unknown{% endif %}
+    </strong></p>
+    {% if 'Teachers' in group_names %}
+        <div class="mb-3">
+            <strong>Assigned Classrooms:</strong>
+            {% with teacher_assignments=profile.user.teacherassignment_set.all %}
+                {% if teacher_assignments %}
+                    <ul class="mb-2">
+                        {% for ta in teacher_assignments %}
+                            <li>{{ ta.classroom.name }} ({{ ta.subject.name }})</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <span class="text-muted">No classrooms assigned.</span>
+                {% endif %}
+            {% endwith %}
+        </div>
+    {% endif %}
+    {% if 'Students' in group_names %}
+        <p><strong>Classroom:</strong> {{ classroom.name }}</p>
+        <p><strong>Subjects:</strong>
+            {% if subjects %}
+                {% for subject in subjects %}
+                    {{ subject.name }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            {% else %}
+                No subjects assigned.
+            {% endif %}
+        </p>
+    {% endif %}
+    <div class="mb-3">
+        <a href="/password_change/" class="btn btn-outline-dark animate__animated animate__pulse animate__infinite">Change Password</a>
+    </div>
+    <hr>
+    {% if 'Teachers' in group_names %}
+        <div class="alert alert-info">This is your <strong>Teacher Dashboard</strong>. You can mark attendance, add marks, post notices, and upload assignments for your classes.</div>
+        <div class="row">
+            <div class="col-md-3 mb-2"><a href="/attendance/mark/" class="btn btn-primary w-100">Mark Attendance</a></div>
+            <div class="col-md-3 mb-2"><a href="/marks/add/" class="btn btn-success w-100">Add Marks</a></div>
+            <div class="col-md-3 mb-2"><a href="/notices/add/" class="btn btn-info w-100">Post Notice</a></div>
+            <div class="col-md-3 mb-2"><a href="/assignments/add/" class="btn btn-warning w-100">Add Assignment</a></div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-3 mb-2"><a href="/attendance/" class="btn btn-outline-primary w-100">View Attendance</a></div>
+            <div class="col-md-3 mb-2"><a href="/marks/" class="btn btn-outline-success w-100">View Marks</a></div>
+            <div class="col-md-3 mb-2"><a href="/notices/" class="btn btn-outline-info w-100">View Notices</a></div>
+            <div class="col-md-3 mb-2"><a href="/assignments/" class="btn btn-outline-warning w-100">View Assignments</a></div>
+        </div>
+    {% elif 'Students' in group_names %}
+        <div class="row">
+            <div class="col-md-3 mb-2"><a href="/attendance/" class="btn btn-outline-primary w-100">Attendance</a></div>
+            <div class="col-md-3 mb-2"><a href="/marks/" class="btn btn-outline-success w-100">Marks</a></div>
+            <div class="col-md-3 mb-2"><a href="/notices/" class="btn btn-outline-info w-100">Notices</a></div>
+            <div class="col-md-3 mb-2"><a href="/assignments/" class="btn btn-outline-warning w-100">Assignments</a></div>
+        </div>
+    {% else %}
+        <div class="alert alert-warning">You do not have a student or teacher role assigned.</div>
+    {% endif %}
+</div>
+{% endblock %} 
