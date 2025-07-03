@@ -23,10 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-$foe_d$hsf#03nh^123)e-g#6fxr5oi%0)$rg_^cb&fc*hn4@#'  # Change this in production!
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # Add your PythonAnywhere domain here, e.g. 'yourusername.pythonanywhere.com'
-ALLOWED_HOSTS = ['yourusername.pythonanywhere.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -118,10 +118,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-STATIC_ROOT = BASE_DIR / 'staticfiles'  # For collectstatic on PythonAnywhere
+STATICFILES_DIRS = []  # ✅ Remove this if you're only using collectstatic
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # ✅ Used by collectstatic
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
